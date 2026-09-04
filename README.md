@@ -27,9 +27,11 @@ Teknologier:
 
 Hvordan kjøre prosjektet:
 
-Last ned eller klon repositoryet og åpne prosjektmappen i VS Code.
+Nettsiden kan  åpnes ved å kopiere lenken: https://benjaminruud.github.io/Jegergruppe_nettside/ i nettleseren.
 
-For en enkel HTML/CSS/JavaScript-versjon kan nettsiden åpnes ved å starte `index.html` i nettleseren.
+Hvis dette ikke funker, last ned eller klon repositoryet og åpne prosjektmappen i en kodeeditor.
+
+
 
 
 Hva jeg lærte:
