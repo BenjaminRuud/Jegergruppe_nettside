@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="no">
+<head> 
+  <title> Skytespill </title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="Stilark.css">
+  <style>
+    
+    #bildeboks{
+      cursor: url(medier/cursor.png), auto;
+    }
+    
+
+  </style>
+</head>
+<body>
+    <div id="meny">
+        <h1>Skytespill</h1>
+        <a class="Lenke" href="Index.html">Forside</a>
+        <a class="Lenke" href="Skytespill.html">Spill Skytespillet</a>
+        <a class="Lenke" href="RegistrerDyr.html">Registrer Dyr</a>
+    </div>
+
+    <div class="container">
+        <h2>Velkommen til Skytespillet</h2>
+        <div>Målet med spillet er å skyte de riktige dyrene. Dersom det dyret som dukker opp er fredet/ulovlig å skyte, vil du få minuspoeng og 1 feil. Etter 3 feil har du tapt. Hurtigheten på spillet vil øke ettersom hvor lang tid du bruker. Bildene er ai-generert med <a class="bildekilde" href="https://copilot.microsoft.com/">Copilot</a>. </div>
+        <button id="startSpillet">Start spill</button>
+    </div>
+    <div class="container">
+      <div id="bildeboks">
+          <img src="medier/bakgrunn.jpeg" alt="bakgrunnsbilde" height="300" width="300">
+          <img src="medier/bakgrunn.jpeg" alt="bakgrunnsbilde" height="300" width="300">      
+          <img src="medier/bakgrunn.jpeg" alt="bakgrunnsbilde" height="300" width="300">
+          <img src="medier/bakgrunn.jpeg" alt="bakgrunnsbilde" height="300" width="300">
+          <img src="medier/bakgrunn.jpeg" alt="bakgrunnsbilde" height="300" width="300">
+          <img src="medier/bakgrunn.jpeg" alt="bakgrunnsbilde" height="300" width="300">
+          <img src="medier/bakgrunn.jpeg" alt="bakgrunnsbilde" height="300" width="300">
+          <img src="medier/bakgrunn.jpeg" alt="bakgrunnsbilde" height="300" width="300">
+          <h2 id="poeng">Poeng: 0 Antall feil: 0</h2>
+      </div>
+    </div>
+ <script>
+    let bildeArrayE = document.querySelectorAll("img")
+    let buttonE = document.querySelector("#startSpillet")
+    let poengE = document.querySelector("#poeng")
+    let bildeboksE = document.querySelector("#bildeboks")
+    let i=0
+    let poeng=0
+    let antallFeil = 0
+    let tidsintervall = 1500
+  
+
+    buttonE.addEventListener("click", startSpill)
+    
+    
+
+  
+    function startSpill(){
+    //starter spillet åpner et tilfeldig bilde på en tilfeldig plass
+      if (antallFeil<3){
+        tilfeldigTall=Math.floor(Math.random()*bildeArrayE.length)
+        let tilfeldigTall2 = Math.floor(Math.random()*bildeArrayE.length)
+        
+        buttonE.removeEventListener("click", startSpill)
+        
+        
+    
+        bildeArrayE[tilfeldigTall].src="medier/"+tilfeldigTall2+".jpeg"
+        
+        bildeArrayE[tilfeldigTall].addEventListener("click", sjekkPoeng)
+
+        //gir bildet en class utifra om det er lovlig å skyte eller ikke
+        if(tilfeldigTall2<4){
+          bildeArrayE[tilfeldigTall].className= "ja";
+        } else{
+          bildeArrayE[tilfeldigTall].className= "nei";
+        }
+
+        //endrer tidsintervallet mellom rundene så det går kjappere
+        if(tidsintervall>700){
+        tidsintervall=tidsintervall-40}
+      
+        setTimeout(nyRunde, tidsintervall)
+      } else{ 
+        bildeboksE.innerHTML= "<h1>Game over</h1> Poeng: "+poeng
+        bildeboksE.style.fontSize= "75px"  
+      }
+      
+    }
+
+    function nyRunde(){
+      //setter bildet tilbake til bakgrunnsbildet og kjører startSpill igjen
+        bildeArrayE[tilfeldigTall].src="medier/bakgrunn.jpeg"
+        bildeArrayE[tilfeldigTall].removeEventListener("click", sjekkPoeng)
+        setTimeout(startSpill, tidsintervall)
+    }
+
+    function sjekkPoeng(){
+      //sjekker hvis dyre er lovlig å skyte eller ikke og gir poeng utifra det
+      if(bildeArrayE[tilfeldigTall].className=="ja"){
+         poeng++
+         poengE.innerHTML="Poeng:"+poeng+" Antall feil:"+antallFeil
+         bildeArrayE[tilfeldigTall].removeAttribute("class")
+      } else if(bildeArrayE[tilfeldigTall].className=="nei"){
+         antallFeil++
+         poeng--
+         poengE.innerHTML="Poeng:"+poeng+" Antall feil:"+antallFeil
+         bildeArrayE[tilfeldigTall].removeAttribute("class") 
+      }
+    }
+ </script>
+</body>
+</html>

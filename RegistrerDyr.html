@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="no">
+<head> 
+  <title> Registrer Dyr </title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="Stilark.css">
+  <style>
+ 
+    .kvittering{
+      background-color:burlywood;
+      border: 3px solid black;
+      margin: 10px;
+      padding: 10px; 
+      height: 300px;
+      display: flex;
+      justify-content:space-between;
+    }
+
+    .tekstboks{
+    padding: 4vw;
+    }
+
+    #hvilketKjonn{
+      display:flex;
+      flex-wrap: wrap;
+    }
+
+    #bilde{
+      width: 300px;
+      height: 300px;
+    }
+
+    .kjonn{
+      margin-right: 20px;
+    }
+
+    #feilmelding{
+      color: red;
+    }
+
+    #beholder{
+      display: flex;
+      flex-direction: column;
+    }
+
+  </style>
+</head>
+<body>
+    <div id="meny">
+        <h1>Registrer Dyr</h1>
+        <a class="Lenke" href="Index.html">Forside</a>
+        <a class="Lenke" href="Skytespill.html">Spill Skytespillet</a>
+        <a class="Lenke" href="RegistrerDyr.html">Registrer Dyr</a>
+    </div>
+
+    <div class="container">
+      <div class="checkboxradio">
+        <h3>Hvilket dyr har du skutt?</h3>
+        <label>
+          <input type="radio" name="dyr" value="hare" id="hare" checked> Hare
+        </label>
+
+        <label>
+          <input type="radio" name="dyr" value="hjort" id="hjort" > Hjort
+        </label>
+
+        <label>
+         <input type="radio" name="dyr" value="elg" id="elg" > Elg
+        </label>
+
+        <label>
+          <input type="radio" name="dyr" value="rev" id="rev" > Rev
+        </label>   
+      </div>
+      <br>
+      <h3>Antall dyr skutt</h3>
+      <label>
+        <input type="number" min="0" value="0" id="antallDyr">
+      </label>
+      <br>
+        
+      <div id="hvilketKjonn">
+        <div>
+          <h3>Antall hankjønn </h3>
+          <label class="kjonn">
+            <input type="number" min="0" value="0" id="hankjonn" >
+          </label>
+        </div>
+        <div>
+          <h3>Antall hunkjønn</h3>
+          <label class="kjonn">
+            <input type="number" min="0" value="0" id="hunkjonn" >
+          </label>
+        </div>
+      </div>
+
+      <h3>Dato</h3>
+      <label>
+        <input type="date" id="dato">
+      </label>
+      <br>
+      <br>
+      <button>Registrer dyr</button>
+     <div id="feilmelding"></div>  
+    </div>
+    <div id="beholder"></div>
+
+ <script>
+  
+  let hvilketDyr = document.querySelectorAll("input[type='radio']");
+  let antallDyrE = document.querySelector("#antallDyr");
+  let hankjonnE= document.querySelector("#hankjonn");
+  let hunkjonnE= document.querySelector("#hunkjonn");
+  let buttonE = document.querySelector("button");
+  let datoE = document.querySelector("#dato");
+  let feilmeldingE = document.querySelector("#feilmelding");
+  let beholderE= document.querySelector("#beholder");
+  let kvitteringArray = []; 
+  let nykvittering={};
+
+  
+  buttonE.addEventListener("click", registrerDyr)
+     
+  console.log("hei")           
+
+
+  function registrerDyr(){ 
+    //sjekker for feilmeldinger
+    if(antallDyrE.value==0){ 
+      feilmeldingE.innerText = "Du må fylle inn antall dyr!";    
+    }else if(Number(hankjonnE.value)+Number(hunkjonnE.value)!==Number(antallDyrE.value)){ 
+      feilmeldingE.innerText = "Antall han og hunkjønn må være like mye som antall dyr skutt";  
+    }else if(datoE.value == ""){ 
+      feilmeldingE.innerText = "Du må fylle inn dato!"; 
+    }else{ 
+      let a=0      
+      //Lager verdiene til kvitteringen 
+      while(a<hvilketDyr.length){
+        if(hvilketDyr[a].checked==true){
+            nykvittering = {
+            hvilketDyr: hvilketDyr[a].value,
+            antallDyr: antallDyrE.value, 
+            hankjonn: hankjonnE.value,
+            hunkjonn: hunkjonnE.value, 
+            dato: datoE.value,
+            bilde: "medier/"+a+".jpeg"
+            };
+        }
+        a++
+      }
+      //legger kvitteringen i arrayen
+      kvitteringArray.unshift(nykvittering); 
+      
+      visKvittering();   
+
+      feilmeldingE.innerText = "";   
+    }       
+  } 
+
+  function visKvittering(){ 
+    beholderE.innerHTML=""
+   
+    for(let i=0; i<kvitteringArray.length; i++){
+      //lager elementer
+      let kvittering = document.createElement("div"); 
+      let tekstboks = document.createElement("div")
+      let h2 = document.createElement("h2"); 
+      let h3 = document.createElement("h3"); 
+      let p = document.createElement("p"); 
+      let bilde = document.createElement("img");
+          
+     
+      kvittering.className="kvittering"
+      tekstboks.className="tekstboks"
+      bilde.id="bilde"
+      
+      //endrer innholdet til elementene
+      h2.innerHTML = "Du har skutt "+kvitteringArray[i].antallDyr+" dyr av typen "+kvitteringArray[i].hvilketDyr
+      bilde.src= kvitteringArray[i].bilde
+
+
+      h3.innerHTML = kvitteringArray[i].hankjonn+" av dem var hankjønn og "+kvitteringArray[i].hunkjonn+" av dem var hunkjønn"
+
+      p.innerHTML = "Registrert på datoen "+kvitteringArray[i].dato+"<br> <br><h3>Takk for at du registrerer hos oss!</h3>"          
+          
+      //legger til elementene på nettsiden
+      beholderE.appendChild(kvittering); 
+      kvittering.appendChild(tekstboks)
+      tekstboks.appendChild(h2); 
+      tekstboks.appendChild(h3); 
+      tekstboks.appendChild(p); 
+
+      kvittering.appendChild(bilde)
+          
+    }   
+  } 
+ </script>
+</body>
+</html>
